@@ -1,5 +1,6 @@
 import random
 import string
+import qrcode
 
 def koda(dolzina):
     koda = ""
@@ -17,14 +18,24 @@ def koda(dolzina):
         znak = random.choice(moznost)
         koda += znak
     
-
     return koda
 
 # url: https://svstefan.si/slike/
 
-def 
+def QRkoda():
+    qr = qrcode.QRCode(
+        version = 1,
+        error_correction = qrcode.constants.ERROR_CORRECT_H,
+        box_size = 10,
+        border = 1
+    )
+    url = "https://svstefan.si/slike/"
+    qr.add_data(url)
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save("sv stefan_qr.png")
+
+    return img
 
 
-
-
-print(koda(20))
+print(koda(5))
+print(QRkoda())
