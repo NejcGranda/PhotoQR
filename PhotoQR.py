@@ -22,7 +22,7 @@ def koda(dolzina):
 
 # url: https://svstefan.si/slike/
 
-def QRkoda():
+def QRkoda(koda):
     qr = qrcode.QRCode(
         version = 1,
         error_correction = qrcode.constants.ERROR_CORRECT_H,
@@ -37,5 +37,6 @@ def QRkoda():
     return img
 
 
-print(koda(5))
-print(QRkoda())
+koda = koda(5)
+
+QRkoda(koda)
