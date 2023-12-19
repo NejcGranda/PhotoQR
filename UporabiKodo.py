@@ -2,16 +2,16 @@
 # Če kode niso na voljo, napiši napako, da kode manjkajo
 # Vzameš vse datoteke iz "src" in je premkaneš v "dst" z novim imenom: "<koda>_<original_ime_datoteke>"
 
-# pypdf
 import os
 import shutil
 
 
-SRC_FOLDER = "./src"
+SRC_FOLDER = "./kode"
 DST_FOLDER = "./dst"
 
 
 def izberi_kodo(datoteka):
+
     with open(datoteka, "r") as fin:
         data = fin.read().splitlines(True)
 
@@ -31,8 +31,9 @@ def premakni_file(koda, src_folder, dst_folder):
         dst_file = dst_folder + "/" + koda + "_" + file_name
         if os.path.isfile(src_file):
             shutil.move(src_file, dst_file)
+
     
-#### MAIN ###
+#### MAIN ####
 
 # Preveri če obstajajo datoteke v mapi src !
 
