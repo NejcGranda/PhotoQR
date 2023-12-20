@@ -2,7 +2,6 @@ import random
 import string
 import qrcode
 from os.path import exists
-import pypdf
 import fitz
 from PIL import Image
 
@@ -34,11 +33,15 @@ def QRkoda(koda):
         box_size = 10,
         border = 0
     )
+
     url = "https://svstefan.si/slike/" + koda + "/"
     qr.add_data(url)
     qr.make(fit = True)
     img = qr.make_image(fill_color="black", back_color="white")
-    img = img.resize((113, 113))
+
+    mm_to_px = 4
+
+    img = img.resize((30 * mm_to_px, 30 * mm_to_px))
 
     img.save("kode/" + koda + ".png")
 
@@ -72,19 +75,28 @@ def shrani_kodo(koda, datoteka):
 def ustvari_pdf(koda):
     pdf = fitz.open()
     page = pdf.new_page()
-    img_path = "kode/RT84EFMN.png"
+    print(page.rect)
+    img_path = "kode/" + koda + ".png"
 
-    levi_rob = 13.916220472440946
-    levi_rob1 = 410.7666141732284
-    zgornji_rob = 113.8620472440945
+    mm_to_points = 2.83456
+    px_to_points = 0.75
+    mm_width, mm_height = 30, 30
+    width_in_points = mm_width * mm_to_points
+    height_in_points = mm_height * mm_to_points
+
+
+    levi_rob = 3.682 * mm_to_points
+    levi_rob1 = 108.682
+    zgornji_rob = 30.126 * mm_to_points
+    
 
     for i in range(5):
     
         img = fitz.open(img_path)
-        rect = fitz.Rect(levi_rob, zgornji_rob, levi_rob + 113, zgornji_rob + 113)
+        rect = fitz.Rect(levi_rob, zgornji_rob, levi_rob + (90 * mm_to_points), zgornji_rob + (90 * mm_to_points))
         page.insert_image(rect, filename = img_path)
 
-        zgornji_rob += 188.9763779527559
+        zgornji_rob += 50 * mm_to_points
 
 
     pdf.save("sv-stefan.pdf")
