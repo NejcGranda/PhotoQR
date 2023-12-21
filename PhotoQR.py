@@ -1,7 +1,8 @@
 import random
 import string
 import qrcode
-from os.path import exists
+from os.path import exists, isfile
+from os import listdir
 import fitz
 from PIL import Image
 
@@ -70,13 +71,13 @@ def shrani_kodo(koda, datoteka):
     file.writelines(koda + "\n")
     file.close
 
-def ustvari_pdf(koda):
-    pdf = fitz.open("SvStefan-Photo-ThankYou-Card-Print.pdf")
+def ustvari_pdf(kode, pdf_file_path):
+    pdf = fitz.open("assets/SvStefan-Photo-ThankYou-Card-Print.pdf")
     page = pdf[0]
-    img_path = "kode/" + koda + ".png"
 
+    fontsize = 14
     mm_to_points = 2.83456
-#QR
+    #QR
     QR_size_mm = 30
     top_margin_QR_mm = 30.126
     left_margin_QR_mm = 3.682
@@ -87,10 +88,10 @@ def ustvari_pdf(koda):
     left_margin_QR = left_margin_QR_mm * mm_to_points
     left_margin_QR1 = left_margin_QR_mm1 * mm_to_points
 
-#TEXT
-    text_size_mm_x = 24.346
-    text_size_mm_y = 7.255
-    top_margin_text_mm = 54.539
+    #TEXT
+    text_size_mm_x = 35
+    text_size_mm_y = 10.255
+    top_margin_text_mm = 53.539
     left_margin_text_mm = 36.46
     left_margin_text_mm1 = 141.46
 
@@ -100,42 +101,53 @@ def ustvari_pdf(koda):
     left_margin_text = left_margin_text_mm * mm_to_points
     left_margin_text1 = left_margin_text_mm1 * mm_to_points
 
-    
-    font_name = "hebo"
+    for i,koda in enumerate(kode):
+        print("adding code " + str(i))
+        img_path = "kode/" + koda + ".png"
 
-
-    for i in range(5):
-    
-    #QR
+        #QR
         img = fitz.open(img_path)
-        rectQR_L = fitz.Rect(left_margin_QR, top_margin_QR, left_margin_QR + QR_size, top_margin_QR + QR_size)
-        page.insert_image(rectQR_L, filename = img_path)
 
-        rectQR_L = fitz.Rect(left_margin_QR1, top_margin_QR, left_margin_QR1 + QR_size, top_margin_QR + QR_size)
-        page.insert_image(rectQR_L, filename = img_path)
+        if i%2 == 0:
+            # Levo
+            rectQR_L = fitz.Rect(left_margin_QR, top_margin_QR, left_margin_QR + QR_size, top_margin_QR + QR_size)
+            page.insert_image(rectQR_L, filename = img_path)
 
-    #TEXT
-        
-        text = koda
-        textbox_rect = fitz.Point(left_margin_text, top_margin_text, left_margin_text + text_size_x, top_margin_text + text_size_y)
-        textbox = page.insertTextbox(textbox_rect, text, fontsize = 10 )
+            textbox_rect_L = fitz.Rect(left_margin_text, top_margin_text, left_margin_text + text_size_x, top_margin_text + text_size_y)
+            page.insert_textbox(textbox_rect_L, koda, fontsize = fontsize, fontfile = None, align = 0)
+        else:
+            # Desno
+            rectQR_D = fitz.Rect(left_margin_QR1, top_margin_QR, left_margin_QR1 + QR_size, top_margin_QR + QR_size)
+            page.insert_image(rectQR_D, filename = img_path)
 
+            textbox_rect_D = fitz.Rect(left_margin_text1, top_margin_text, left_margin_text1 + text_size_x, top_margin_text + text_size_y)
+            page.insert_textbox(textbox_rect_D, koda, fontsize = fontsize, fontfile = None, align = 0)
 
-        top_margin_QR += (57 * mm_to_points)
-        top_margin_text += (57 * mm_to_points)
+            top_margin_QR += (57 * mm_to_points)
+            top_margin_text += (57 * mm_to_points)
 
-
-    pdf.save("sv-stefan.pdf")
+    # Shrani
+    pdf.save(pdf_file_path)
     pdf.close()
 
+def naslednje_ime_print_pdf():
+    folder_path = "pdf/"
+    count = 1
+
+    for path in listdir(folder_path):
+        count += 1
+
+    ime = f"print_pdf_{count:03d}.pdf"
+
+    return ime
 
 #### MAIN ####
 
 
-stevilo = 5
-dolzina = 8
+stevilo = 10
+dolzina = 10
 
-kode = []
+vse_kode = []
 
 for i in range(stevilo):
     koda = generiraj_kodo(dolzina)
@@ -143,14 +155,14 @@ for i in range(stevilo):
     while ali_uporabljena(koda) == True:
         koda = generiraj_kodo(dolzina)
 
-    kode.append(koda)
+    vse_kode.append(koda)
     shrani_kodo(koda, "kode_vse.txt")
     shrani_kodo(koda, "kode_na_voljo.txt")
     QRkoda(koda)
-    ustvari_pdf(koda)
     print(str(i) + ": " + koda)
     
-
+# Naredi PDF
+ustvari_pdf(vse_kode, "pdf/" + naslednje_ime_print_pdf())
 
 
 # ime: datum, ura
