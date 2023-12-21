@@ -108,7 +108,7 @@ def ustvari_pdf(kode, pdf_file_path):
         #QR
         img = fitz.open(img_path)
 
-        if i%2 == 0:
+        if i % 2 == 0:
             # Levo
             rectQR_L = fitz.Rect(left_margin_QR, top_margin_QR, left_margin_QR + QR_size, top_margin_QR + QR_size)
             page.insert_image(rectQR_L, filename = img_path)

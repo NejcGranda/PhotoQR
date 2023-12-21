@@ -51,6 +51,7 @@ def zip_images(code_folder_path, code):
                 if not file.endswith(".thumb.jpg"):
                     zipf.write(os.path.join(code_folder_path, file), file)
 
+
 def resize_image_with_compression(image_path, output_path, max_size=600, quality=80):
     """
     Resize the image, maintaining aspect ratio, so that its longest side is `max_size` pixels,
@@ -62,7 +63,7 @@ def resize_image_with_compression(image_path, output_path, max_size=600, quality
         new_size = tuple([int(x * ratio) for x in img.size])
 
         # Resize the image
-        resized_img = img.resize(new_size, Image.ANTIALIAS)
+        resized_img = img.resize(new_size, resample=Image.LANCZOS)
 
         # Save the resized image with JPEG compression
         resized_img.save(output_path, quality=quality, optimize=True)
@@ -106,31 +107,7 @@ def move_resize_and_zip_images(export_path, publish_path):
 export_path = './export'  # Replace with the actual path to the export folder
 publish_path = './publish' # Replace with the actual path to the publish folder
 
-# Uncomment the line below to run the function with your paths
+
 move_resize_and_zip_images(export_path, publish_path)
 
-
-# Function to move files from 'export' to 'publish' in their respective 'code' folders
-
-
-# Call the function
-move_files_to_code_folders(export_path, publish_path)
-
-"""
-    folder_path = "./export"
-    dst_folder = "./publish"
-    file = os.listdir(folder_path)
-
-    for file_name in os.listdir(folder_path):
-        koda = file_name.split('_')[0]
-
-        src_file = folder_path + "/" + file_name
-        dst_file = dst_folder + "/"  + koda + "/" + file_name
-
-        os.makedirs(dst_folder + "/" + koda)
-
-        if os.path.isfile(src_file):
-            shutil.move(src_file, dst_file)
-
-objavi()
-"""
+# move_files_to_code_folders(export_path, publish_path)
