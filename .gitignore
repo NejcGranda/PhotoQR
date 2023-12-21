@@ -1,7 +1,9 @@
 kode/
 kode_vse.txt
 kode_na_voljo.txt
-dst
+dst/*
 pdf/*
-src
+src/*
 __*
+export/*
+publish/*

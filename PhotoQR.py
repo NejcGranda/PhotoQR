@@ -141,6 +141,7 @@ def naslednje_ime_print_pdf():
 
     return ime
 
+
 #### MAIN ####
 
 
