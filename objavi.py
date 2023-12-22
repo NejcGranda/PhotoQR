@@ -36,7 +36,6 @@ def move_files_to_code_folders(export_path, publish_path):
             shutil.move(os.path.join(export_path, file), os.path.join(code_folder_path, file))
 
 def zip_images(code_folder_path, code):
-    print(code_folder_path)
     """
     Create a ZIP archive of all the original images in the code folder.
     The ZIP file is named "sv-Stefan_{code}_slike.zip".
@@ -90,11 +89,11 @@ def move_resize_and_zip_images(export_path, publish_path):
 
             # Full path for the original and the thumbnail image
             original_path = os.path.join(export_path, file)
-            publish_path = os.path.join(code_folder_path, file)
+            publish_code_path = os.path.join(code_folder_path, file)
             thumbnail_path = os.path.join(code_folder_path, file.rsplit('.', 1)[0] + ".thumb.jpg")
 
             # Move the original file to the 'code' folder
-            shutil.move(original_path, publish_path)
+            shutil.move(original_path, publish_code_path)
 
             # Create and save the thumbnail with compression
             resize_image_with_compression(publish_path, thumbnail_path)
