@@ -1,4 +1,4 @@
-kode/
+kode/*
 kode_vse.txt
 kode_na_voljo.txt
 dst/*
@@ -7,3 +7,4 @@ src/*
 __*
 export/*
 publish/*
+.env
