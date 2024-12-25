@@ -12,11 +12,11 @@ from PIL import Image
 load_dotenv()
 
 
-def generiraj_kodo(dolzina):
+def generiraj_kodo(dolzina, count):
     
     koda = ""
 
-    for i in range(dolzina):
+    for i in range(dolzina - 3):
         stevilka = random.randint(1, 9)
         crka = random.choice(string.ascii_uppercase)
 
@@ -27,6 +27,9 @@ def generiraj_kodo(dolzina):
 
         znak = random.choice(moznost)
         koda += znak
+
+    # append count to the end of the code with leading zeros, 3 places
+    koda += str(count).zfill(3)
     
     return koda
 
@@ -152,25 +155,28 @@ def naslednje_ime_print_pdf():
 #### MAIN ####
 
 
-stevilo = 10
+stevilo = 100
 dolzina = 10
+count_offset = 501
 
 vse_kode = []
 
 for i in range(stevilo):
-    koda = generiraj_kodo(dolzina)
+    koda = generiraj_kodo(dolzina, i+count_offset)
 
     while ali_uporabljena(koda) == True:
-        koda = generiraj_kodo(dolzina)
+        koda = generiraj_kodo(dolzina, i+count_offset)
 
     vse_kode.append(koda)
     shrani_kodo(koda, "kode_vse.txt")
     shrani_kodo(koda, "kode_na_voljo.txt")
     QRkoda(koda)
     print("Koda " + str(i) + ": " + koda)
-    
-# Naredi PDF
-ustvari_pdf(vse_kode, "pdf/" + naslednje_ime_print_pdf())
 
+    # For every 10th code, print the codes to a PDF
+    if (i+1) % 10 == 0:
+        print("Printing PDF")
+        ustvari_pdf(vse_kode, "pdf/" + naslednje_ime_print_pdf())
+        vse_kode = []
 
 # ime: datum, ura

@@ -100,4 +100,4 @@ def move_resize_and_zip_images(export_path, publish_path):
         zip_images(os.path.join(publish_path, code), code)
 
 
-move_resize_and_zip_images(os.getenv('LIGHTROOM_OUT_FOLDER'), os.getenv('PUBLISH_FOLDER'))
+# move_resize_and_zip_images(os.getenv('LIGHTROOM_OUT_FOLDER'), os.getenv('PUBLISH_FOLDER'))

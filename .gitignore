@@ -8,3 +8,5 @@ __*
 export/*
 publish/*
 .env
+.venv
+__pycache__
